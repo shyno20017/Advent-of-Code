@@ -1311,34 +1311,6 @@ function findRoot(data) {
   }
 }
 
-function findRootWeight(data) {
-  let disks = [];
-  data = data.split('\n').map((current) => {return current.split(' ')});
-  for (elt of data) {
-    disks.push(new Disk(elt[0], parseInt(elt[1].substr(1, elt[1].length-2))));
-  }
-  for (current of data) {
-    if (current.length > 2) {
-      let childs = current.slice(3);
-      for (let i = 0; i < childs.length - 1; i++) {
-        childs[i] = childs[i].substr(0, childs[i].length - 1);
-      }
-      currentDisk = disks[findDiskByName(disks, current[0])];
-      for (child of childs) {
-        childDisk = disks[findDiskByName(disks, child)];
-        currentDisk.addChild(childDisk);
-        childDisk.setParent(currentDisk);
-      }
-    }
-  }
-  for (let i = 0; i < disks.length; i++) {
-    if (disks[i].parent === undefined) {
-      disks[i].findWeight();
-      return [disks[i], disks];
-    }
-  }
-}
-
 
 function findDiskByName(arr, search) {
   return arr.findIndex((elt) => {return elt.name === search});
@@ -1347,4 +1319,3 @@ function findDiskByName(arr, search) {
 
 
 console.log(findRoot(input));
-console.log(findRootWeight(input));
