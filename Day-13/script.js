@@ -129,6 +129,7 @@ function getSeverity(arr) {
 
 
 console.log(calcSeverity(input));
+console.log(findPath(test));
 
 // This one takes a Very long while to compute
 // console.log(findPath(input));
