@@ -19,7 +19,10 @@ function calculateChecksumAdjacent(data) {
 }
 
 function calculateChecksumHalfway(data) {
-  return data.split('').filter((current, index) => {return current === data[(index + data.length/2) % data.length]}).map((current) => {return parseInt(current)}).reduce((total, current) => {return total + current}, 0);
+  return data.split('').filter((current, index) =>
+    {return current === data[(index + data.length/2) % data.length]}).map((current) =>
+      {return parseInt(current)}).reduce((total, current) =>
+        {return total + current}, 0);
 
   // Below is a more begginer friendly method to write it
 
