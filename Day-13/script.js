@@ -44,12 +44,6 @@ let input = `0: 3
 90: 20
 92: 14`
 
-let test = `0: 3
-1: 2
-4: 4
-6: 4`;
-
-
 function calcSeverity(data) {
   data = data.split('\n').map(current => current.split(' ').map(x => parseInt(x)));
   let reformatted = [[], []];
@@ -71,7 +65,7 @@ function calcSeverity(data) {
 }
 
 
-function findPath(data) {
+function findWait(data) {
   data = data.split('\n').map(current => current.split(' ').map(x => parseInt(x)));
   let reformatted = [[], []];
   for (let instruction of data) {
@@ -90,37 +84,34 @@ function findPath(data) {
 
   let wait = 0;
   while (true) {
-    if (getSeverity(layers) === 0 && layers[0].scanner !== 0) {
+    if (!isCaught(layers, wait)) {
       return wait;
-    } else if (wait % 10000 === 0) {
-      console.log(wait);
     }
     wait++;
-    Layer.advance(layers)
   }
 }
 
 
 
 function getSeverity(arr) {
-  arr = arr.concat();
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = Object.assign({}, arr[i]);
-  }
-
   let severity = 0;
-  for (let pos = 0; pos < arr.length; pos++) {
-    let curLayer = arr[pos];
-    if (curLayer.range > 0) {
-      if (curLayer.scanner === 0) {
-        severity += (curLayer.depth * (curLayer.range+1));
-        //console.log(curLayer.depth, curLayer.range, severity);
-      }
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].isAtTop(i)) {
+      severity += (arr[i].depth * (arr[i].range + 1));
     }
-    Layer.advance(arr)
   }
-
   return severity;
+}
+
+
+function isCaught(arr, off) {
+  for (var i = 0; i < arr.length; i++) {
+    let time = i + off;
+    if (arr[i].range !== -1 && arr[i].isAtTop(time)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 
@@ -129,7 +120,4 @@ function getSeverity(arr) {
 
 
 console.log(calcSeverity(input));
-console.log(findPath(test));
-
-// This one takes a Very long while to compute
-// console.log(findPath(input));
+console.log(findWait(input));

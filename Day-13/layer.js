@@ -8,6 +8,10 @@ class Layer {
     }
   }
 
+  isAtTop(time) {
+    return (time % (this.range * 2)) === 0;
+  }
+
   static advance(arr) {
     for (let layer of arr) {
       if (layer.range > 0) {
