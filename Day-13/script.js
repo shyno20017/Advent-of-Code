@@ -45,42 +45,20 @@ let input = `0: 3
 92: 14`
 
 function calcSeverity(data) {
-  data = data.split('\n').map(current => current.split(' ').map(x => parseInt(x)));
-  let reformatted = [[], []];
-  for (let instruction of data) {
-    reformatted[0].push(instruction[0]);
-    reformatted[1].push(instruction[1]);
-  }
+  let layers = data.split('\n').map(current => new Layer(...current.split(' ').map(x => parseInt(x))));
 
-  let layers = [];
-  for (let i = 0; i <= data[data.length-1][0]; i++) {
-    let range = 0;
-    if (reformatted[0].includes(i)) {
-      range = reformatted[1][reformatted[0].indexOf(i)];
+  let severity = 0;
+  for (let i = 0; i < layers.length; i++) {
+    if (layers[i].isAtTop(layers[i].depth)) {
+      severity += (layers[i].depth * (layers[i].range + 1));
     }
-    layers.push(new Layer(i, range));
   }
-
-  return getSeverity(layers);
+  return severity;
 }
 
 
 function findWait(data) {
-  data = data.split('\n').map(current => current.split(' ').map(x => parseInt(x)));
-  let reformatted = [[], []];
-  for (let instruction of data) {
-    reformatted[0].push(instruction[0]);
-    reformatted[1].push(instruction[1]);
-  }
-
-  let layers = [];
-  for (let i = 0; i <= data[data.length-1][0]; i++) {
-    let range = 0;
-    if (reformatted[0].includes(i)) {
-      range = reformatted[1][reformatted[0].indexOf(i)];
-    }
-    layers.push(new Layer(i, range));
-  }
+  let layers = data.split('\n').map(current => new Layer(...current.split(' ').map(x => parseInt(x))));
 
   let wait = 0;
   while (true) {
@@ -93,29 +71,14 @@ function findWait(data) {
 
 
 
-function getSeverity(arr) {
-  let severity = 0;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].isAtTop(i)) {
-      severity += (arr[i].depth * (arr[i].range + 1));
-    }
-  }
-  return severity;
-}
-
-
-function isCaught(arr, off) {
-  for (var i = 0; i < arr.length; i++) {
-    let time = i + off;
-    if (arr[i].range !== -1 && arr[i].isAtTop(time)) {
+function isCaught(layers, off) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].isAtTop(layers[i].depth + off)) {
       return true;
     }
   }
   return false;
 }
-
-
-
 
 
 
