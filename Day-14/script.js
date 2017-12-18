@@ -51,61 +51,7 @@ function calcRegions(data) {
   let map = [];
   for (let i = 0; i < 128; i++) {
     let hash = knotHash(data + '-' + i);
-    let bin = '';
-    for (let letter of hash) {
-      switch (letter) {
-        case '0':
-          bin += '0000';
-          break;
-        case '1':
-          bin += '0001';
-          break;
-        case '2':
-          bin += '0010';
-          break;
-        case '3':
-          bin += '0011';
-          break;
-        case '4':
-          bin += '0100';
-          break;
-        case '5':
-          bin += '0101';
-          break;
-        case '6':
-          bin += '0110';
-          break;
-        case '7':
-          bin += '0111';
-          break;
-        case '8':
-          bin += '1000';
-          break;
-        case '9':
-          bin += '1001';
-          break;
-        case 'a':
-          bin += '1010';
-          break;
-        case 'b':
-          bin += '1011';
-          break;
-        case 'c':
-          bin += '1100';
-          break;
-        case 'd':
-          bin += '1101';
-          break;
-        case 'e':
-          bin += '1110';
-          break;
-        case 'f':
-          bin += '1111';
-          break;
-      }
-    }
-    map.push(bin)
-
+    map.push(hex2bin(hash));
   }
   map = map.map(current => current.split(''));
   map = map.map(current => current.map(x => new Square(x)));
@@ -124,6 +70,16 @@ function calcRegions(data) {
 
 function index(i, j) {
   return i*128 + j;
+}
+
+
+function hex2bin(data) {
+  let bin = '';
+  for (let ins of data) {
+    let x = parseInt(ins, 16).toString(2);
+    bin += '0'.repeat(4 - x.length) + x;
+  }
+  return bin;
 }
 
 
