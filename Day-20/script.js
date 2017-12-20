@@ -15,11 +15,11 @@ function getClosest(data) {
   while (particles.length > 1) {
     particles.forEach(x => x.update());
     let furthest = findFurthest(particles);
-    if (Math.abs(furthest.pos[0]) > 1000000 && (furthest.pos[0] * furthest.acc[0]) > 0) {
+    if (Math.abs(furthest.pos[0]) > 100000 && (furthest.pos[0] * furthest.acc[0]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
-    } else if (Math.abs(furthest.pos[1]) > 1000000 && (furthest.pos[1] * furthest.acc[1]) > 0) {
+    } else if (Math.abs(furthest.pos[1]) > 100000 && (furthest.pos[1] * furthest.acc[1]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
-    } else if (Math.abs(furthest.pos[2]) > 1000000 && (furthest.pos[2] * furthest.acc[2]) > 0) {
+    } else if (Math.abs(furthest.pos[2]) > 100000 && (furthest.pos[2] * furthest.acc[2]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
     }
   }
@@ -41,13 +41,13 @@ function getNumberAfterCollisions(data) {
     particles.forEach(x => {x.collide(particles)});
     particles = particles.filter(x => !x.remove);
     let furthest = findFurthest(particles);
-    if (Math.abs(furthest.pos[0]) > 100 && (furthest.pos[0] * furthest.acc[0]) >= 0) {
+    if (Math.abs(furthest.pos[0]) > 100000 && (furthest.pos[0] * furthest.acc[0]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
       remaining++;
-    } else if (Math.abs(furthest.pos[1]) > 100 && (furthest.pos[1] * furthest.acc[1]) >= 0) {
+    } else if (Math.abs(furthest.pos[1]) > 100000 && (furthest.pos[1] * furthest.acc[1]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
       remaining++;
-    } else if (Math.abs(furthest.pos[2]) > 100 && (furthest.pos[2] * furthest.acc[2]) >= 0) {
+    } else if (Math.abs(furthest.pos[2]) > 100000 && (furthest.pos[2] * furthest.acc[2]) >= 0) {
       particles.splice(particles.indexOf(furthest), 1);
       remaining++;
     }
